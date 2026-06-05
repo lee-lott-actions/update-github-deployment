@@ -3,14 +3,23 @@ description: A GitHub Action Descriptionto Open a specified GitHub issue using t
 author: Lee Lott
 
 inputs:
-  input-1:
-    description: 'Description of input'
+  deployment-id:
+    description: 'The id of the deployment to be updated'
     required: true
-  input-2:
-    description: 'Description of input'
+  state:
+    description: 'The new status of the deployment'
     required: true
-  input-3:
-    description: 'Description of input'
+  description:
+    description: 'A short description of the deployment'
+    required: true  
+  org-name:
+    description: 'The name of the GitHub Organization'
+    required: true
+  repo-name:
+    description: 'The name of the repository'
+    required: true
+  token:
+    description: 'GitHub token with access to create a deployment'
     required: true
 
 outputs:
@@ -20,17 +29,25 @@ outputs:
   error-message:
     description: 'Error message if the action fails'
     value: ${{ steps.action.outputs.error-message }}
+  deployment-status-id:
+    description: 'The id of the deployment status'
+    value: ${{ steps.action.outputs.deployment_status_id }}
+  deployment-status-state: 
+    description: 'The state of the deployment status'
+    value: ${{ steps.action.outputs.deployment_status_state }}    
 
 runs:
   using: composite
   steps:
-    - name: Action Name
+    - name: Set Deployment State
       id: action
       shell: pwsh
       run: |        
         . "${{ github.action_path }}/action.ps1"
-        run_action `
-          -Input1 "${{ inputs.input-1 }}" `
-          -Input2 "${{ inputs.input-2 }}" `
-          -Input3 "${{ inputs.input-3 }}" `
-      
+        Set-DeploymentStatus `
+          -DeploymentId "${{ inputs.deployment-id }}" `
+          -State "${{ inputs.state }}" `
+          -Description "${{ inputs.description }}" `
+          -OrgName "${{ inputs.org-name }}" `
+          -RepoName "${{ inputs.repo-name }}" `
+          -Token "${{ inputs.token }}"       
