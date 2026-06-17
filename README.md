@@ -46,7 +46,7 @@ This GitHub Action updates the status of an existing GitHub deployment using the
        steps:
          - name: Set Deployment Status
            id: set-deployment-status
-           uses: la-actions/set-deployment-status@v1
+           uses: lee-lott-actions/set-deployment-status@v1
            with:
              deployment-id: '123456789'
              state: 'success'
